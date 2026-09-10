@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sugar Analytics · IONA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="sugar.css">
+</head>
+<body>
+
+    <div class="device-screen sugar-screen">
+        <!-- Dynamic Island сверху -->
+        <div class="dynamic-island"></div>
+
+        <!-- Верхняя панель: Назад + Селектор дней -->
+        <header class="sugar-topbar">
+            <a href="index.html" class="circle-btn back-btn" aria-label="Back">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+            </a>
+
+            <div class="week-pill-selector">
+                <button class="day-chip">M</button>
+                <button class="day-chip active">T</button>
+                <button class="day-chip">W</button>
+                <button class="day-chip">T</button>
+                <button class="day-chip">F</button>
+            </div>
+        </header>
+
+        <!-- Главный показатель: Sugar -->
+        <section class="sugar-hero">
+            <span class="sugar-label">Sugar</span>
+            <div class="sugar-value dot-matrix" id="sugar-val">90</div>
+            <span class="sugar-unit">mg/dL</span>
+
+            <!-- Интерактивная волна глюкозы -->
+            <!-- Интерактивная волна глюкозы со световым импульсом -->
+            <div class="sugar-chart-wrap" id="sugar-chart">
+                <svg viewBox="0 0 320 54" class="sugar-wave-svg" id="wave-svg">
+                    <defs>
+                        <linearGradient id="waveGlow" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="rgba(255, 255, 255, 0.15)"/>
+                            <stop offset="50%" stop-color="#ffffff"/>
+                            <stop offset="100%" stop-color="rgba(255, 255, 255, 0.2)"/>
+                        </linearGradient>
+                    </defs>
+                    <line x1="10" y1="36" x2="310" y2="36" stroke="rgba(255, 255, 255, 0.18)" stroke-width="1.2" />
+                    <path id="glucose-curve" d="M 12 36 Q 45 14 78 36 T 144 36 T 210 36 T 276 36 T 308 36" fill="none" stroke="url(#waveGlow)" stroke-width="1.8" />
+                    
+                    <!-- Бегущий лазерный импульс сканера -->
+                    <circle id="wave-scanner-dot" r="2.8" fill="#ffffff" />
+
+                    <!-- Индикатор текущей точки -->
+                    <g id="sugar-marker" transform="translate(196, 0)">
+                        <polygon points="0,18 -4,12 4,12" fill="#ffffff" />
+                        <line x1="0" y1="18" x2="0" y2="46" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round" />
+                        <circle cx="0" cy="36" r="3" fill="#ffffff" />
+                    </g>
+                </svg>
+            </div>
+        </section>
+
+        <!-- Сетка карточек показателей -->
+        <section class="sugar-widgets-grid">
+            
+            <!-- 1. Average Glucose -->
+            <article class="sugar-card glucose-card interactive-tilt">
+                <div class="card-left-content">
+                    <span class="card-label">Average Glucose</span>
+                    <div class="val-with-unit">
+                        <span class="hero-num">84</span>
+                        <span class="unit-text">mg/dl</span>
+                    </div>
+                </div>
+
+                <div class="neon-ring-gauge">
+                    <svg viewBox="0 0 54 54" class="ring-svg">
+                        <circle cx="27" cy="27" r="21" class="ring-track" />
+                        <circle cx="27" cy="27" r="21" class="ring-fill" />
+                    </svg>
+                    <span class="ring-value">84</span>
+                </div>
+            </article>
+
+            <!-- 2. Time in Range -->
+            <article class="sugar-card range-card interactive-tilt">
+                <span class="card-label">Time in range</span>
+                <div class="range-slider-line">
+                    <div class="line-active"></div>
+                    <div class="line-thumb"></div>
+                </div>
+                <div class="bottom-val-row">
+                    <span class="big-num">100</span>
+                    <span class="percent-sym">%</span>
+                </div>
+            </article>
+
+            <!-- 3. Variability -->
+            <article class="sugar-card variability-card interactive-tilt">
+                <span class="card-label">Variability</span>
+                <div class="fading-dots-row">
+                    <span class="dot d1"></span>
+                    <span class="dot d2"></span>
+                    <span class="dot d3"></span>
+                    <span class="dot d4"></span>
+                    <span class="dot d5"></span>
+                    <span class="dot d6"></span>
+                </div>
+                <div class="bottom-val-row">
+                    <span class="big-num">6.8</span>
+                    <span class="percent-sym">%</span>
+                </div>
+            </article>
+
+            <!-- 4. Vitamin D -->
+            <article class="sugar-card vitd-card interactive-tilt">
+                <span class="card-label nowrap">Vitamin D</span>
+                <div class="bars-chart-row">
+                    <span class="bar b1"></span>
+                    <span class="bar b2"></span>
+                    <span class="bar b3 active-gold"></span>
+                    <span class="bar b4"></span>
+                </div>
+                <div class="bottom-val-row">
+                    <span class="big-num">83</span>
+                    <span class="tag-text">Good</span>
+                </div>
+            </article>
+
+            <!-- 5. Spikes -->
+            <article class="sugar-card spikes-card interactive-tilt">
+                <span class="card-label">Spikes</span>
+                <div class="corner-blue-glow"></div>
+                <div class="bottom-val-row">
+                    <span class="big-num">0</span>
+                    <span class="percent-sym">%</span>
+                </div>
+            </article>
+
+        </section>
+    </div>
+
+    <script src="sugar.js"></script>
+</body>
+</html>

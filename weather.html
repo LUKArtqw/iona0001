@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IONA | Weather</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Silkscreen&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="weather.css">
+</head>
+<body>
+
+    <main class="weather-screen">
+        <!-- Статус-бар iPhone -->
+        <div class="ios-status-bar">
+            <span class="status-time">9:41</span>
+            <div class="dynamic-island"></div>
+            <div class="status-icons">
+                <svg width="17" height="11" viewBox="0 0 17 11" fill="#fff"><path d="M1 8.5h2v2H1zm3.5-3h2v5h-2zm3.5-3h2v8h-2zm3.5-2.5h2v10.5h-2z"/></svg>
+                <svg width="15" height="11" viewBox="0 0 15 11" fill="#fff"><path d="M7.5 2.5a8.4 8.4 0 0 1 5.7 2.2l1.3-1.3A10.3 10.3 0 0 0 7.5.7 10.3 10.3 0 0 0 .5 3.4L1.8 4.7A8.4 8.4 0 0 1 7.5 2.5zm0 3.7a4.6 4.6 0 0 1 3.2 1.2l1.4-1.4A6.5 6.5 0 0 0 7.5 4.3a6.5 6.5 0 0 0-4.6 1.7l1.4 1.4a4.6 4.6 0 0 1 3.2-1.2zm0 3.8a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/></svg>
+                <div class="battery-icon"></div>
+            </div>
+        </div>
+
+        <!-- Шапка -->
+        <header class="weather-topbar">
+            <h1 class="page-title">Weather</h1>
+            <button class="back-chevron" id="close-weather-btn" aria-label="Back">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </button>
+        </header>
+
+        <!-- Температура -->
+        <section class="temp-hero">
+            <div class="temp-container">
+                <span class="temp-val dot-matrix">29</span>
+                <span class="deg-symbol">O</span>
+            </div>
+            <div class="condition-label">Sun</div>
+            <div class="location-label">New York</div>
+        </section>
+
+        <!-- График траектории солнца -->
+       <section class="sun-path-section" id="sun-track-container">
+    <svg class="sun-curve-svg" viewBox="0 0 340 105" id="sun-svg">
+        <!-- Горизонтальная ось -->
+        <line x1="16" y1="74" x2="324" y2="74" stroke="rgba(255, 255, 255, 0.18)" stroke-width="1" />
+
+        <!-- Ночные пунктирные отрезки -->
+        <path d="M 4 82 Q 32 82 64 74" stroke="rgba(255, 255, 255, 0.2)" stroke-width="1.2" stroke-dasharray="3 4" fill="none" />
+        <path d="M 276 74 Q 308 82 336 82" stroke="rgba(255, 255, 255, 0.2)" stroke-width="1.2" stroke-dasharray="3 4" fill="none" />
+
+        <!-- Дневная арка солнца -->
+        <path id="sun-main-arc" d="M 64 74 C 102 12 238 12 276 74" stroke="rgba(255, 255, 255, 0.95)" stroke-width="1.8" fill="none" />
+
+        <!-- Точки восхода и заката -->
+        <circle cx="64" cy="74" r="3" fill="#ffffff" />
+        <circle cx="276" cy="74" r="3" fill="#ffffff" />
+
+        <!-- Интерактивная метка солнца -->
+        <g id="sun-indicator">
+            <!-- Ножка (начинается строго от нижнего края шара r=14, то есть y + 14) -->
+            <line id="sun-stem" x1="222" y1="52" x2="222" y2="74" stroke="rgba(205, 110, 130, 0.6)" stroke-width="1.8" stroke-linecap="round" />
+            
+            <!-- Точка проекции на горизонте -->
+            <circle id="ground-dot" cx="222" cy="74" r="2.6" fill="#ffffff" />
+
+            <!-- Розовый матовый шар -->
+            <circle id="sun-bubble" cx="222" cy="38" r="14" fill="rgba(185, 95, 115, 0.82)" />
+
+            <!-- Векторная микро-иконка солнца внутри -->
+            <g id="sun-mini-icon" transform="translate(222, 38)">
+                <circle cx="0" cy="0" r="2.8" fill="#ffffff" />
+                <!-- 8 тонких лучиков -->
+                <line x1="0" y1="-4.8" x2="0" y2="-6.4" stroke="#ffffff" stroke-width="1.1" stroke-linecap="round" />
+                <line x1="0" y1="4.8" x2="0" y2="6.4" stroke="#ffffff" stroke-width="1.1" stroke-linecap="round" />
+                <line x1="-4.8" y1="0" x2="-6.4" y2="0" stroke="#ffffff" stroke-width="1.1" stroke-linecap="round" />
+                <line x1="4.8" y1="0" x2="6.4" y2="0" stroke="#ffffff" stroke-width="1.1" stroke-linecap="round" />
+                <line x1="-3.4" y1="-3.4" x2="-4.6" y2="-4.6" stroke="#ffffff" stroke-width="1" stroke-linecap="round" />
+                <line x1="3.4" y1="3.4" x2="4.6" y2="4.6" stroke="#ffffff" stroke-width="1" stroke-linecap="round" />
+                <line x1="3.4" y1="-3.4" x2="4.6" y2="-4.6" stroke="#ffffff" stroke-width="1" stroke-linecap="round" />
+                <line x1="-3.4" y1="3.4" x2="-4.6" y2="4.6" stroke="#ffffff" stroke-width="1" stroke-linecap="round" />
+            </g>
+        </g>
+    </svg>
+
+    <!-- Нижняя строка: восход, купол солнца и закат -->
+    <div class="sun-meta-row">
+        <div class="meta-item left">
+            <span class="meta-time">6:14</span>
+            <span class="meta-desc">Sunrise</span>
+        </div>
+
+        <div class="meta-item center">
+    <!-- Укрупненное пиксельное солнце 26x26 -->
+    <svg class="pixel-sun-svg" viewBox="0 0 26 26" width="26" height="26" aria-hidden="true">
+        <!-- Лучи по сторонам света (N, S, W, E) -->
+        <rect x="11" y="0" width="4" height="4" fill="#ffffff" />
+        <rect x="11" y="22" width="4" height="4" fill="#ffffff" />
+        <rect x="0" y="11" width="4" height="4" fill="#ffffff" />
+        <rect x="22" y="11" width="4" height="4" fill="#ffffff" />
+
+        <!-- Диагональные лучики -->
+        <rect x="4" y="4" width="4" height="4" fill="#ffffff" />
+        <rect x="18" y="4" width="4" height="4" fill="#ffffff" />
+        <rect x="4" y="18" width="4" height="4" fill="#ffffff" />
+        <rect x="18" y="18" width="4" height="4" fill="#ffffff" />
+
+        <!-- Центральное тело солнца -->
+        <rect x="8" y="8" width="10" height="10" fill="#ffffff" />
+    </svg>
+    <span class="meta-desc" id="sun-status-label">Good Sun</span>
+</div>
+
+        <div class="meta-item right">
+            <span class="meta-time">17:21</span>
+            <span class="meta-desc">Sunset</span>
+        </div>
+    </div>
+</section>
+
+        <!-- Виджеты -->
+        <!-- 1. Enhance Mood Card -->
+<!-- Нижняя сетка из двух карточек рядом -->
+       <!-- ЕДИНЫЙ КОНТЕЙНЕР ДЛЯ ДВУХ КАРТОЧЕК -->
+        <section class="weather-widgets">
+            
+            <!-- Левая карточка: Mood -->
+            <article class="weather-card mood-card interactive-tilt">
+                <div class="card-head">
+                    <h2 class="card-title">Enhance</h2>
+                    <span class="card-sub">Mood</span>
+                </div>
+
+                <div class="mood-center-body">
+                    <div class="mood-val dot-matrix">9 3</div>
+                    <div class="mood-waveform wide" aria-hidden="true">
+                        <!-- 29 полосок волны -->
+                        <span class="wave-bar" style="--h: 4px"></span>
+                        <span class="wave-bar" style="--h: 6px"></span>
+                        <span class="wave-bar" style="--h: 9px"></span>
+                        <span class="wave-bar" style="--h: 12px"></span>
+                        <span class="wave-bar" style="--h: 16px"></span>
+                        <span class="wave-bar" style="--h: 20px"></span>
+                        <span class="wave-bar" style="--h: 25px"></span>
+                        <span class="wave-bar" style="--h: 30px"></span>
+                        <span class="wave-bar" style="--h: 36px"></span>
+                        <span class="wave-bar" style="--h: 42px"></span>
+                        <span class="wave-bar" style="--h: 48px"></span>
+                        <span class="wave-bar" style="--h: 54px"></span>
+                        <span class="wave-bar" style="--h: 60px"></span>
+                        <span class="wave-bar" style="--h: 66px"></span>
+                        <span class="wave-bar peak" style="--h: 72px"></span>
+                        <span class="wave-bar" style="--h: 66px"></span>
+                        <span class="wave-bar" style="--h: 60px"></span>
+                        <span class="wave-bar" style="--h: 54px"></span>
+                        <span class="wave-bar" style="--h: 48px"></span>
+                        <span class="wave-bar" style="--h: 42px"></span>
+                        <span class="wave-bar" style="--h: 36px"></span>
+                        <span class="wave-bar" style="--h: 30px"></span>
+                        <span class="wave-bar" style="--h: 25px"></span>
+                        <span class="wave-bar" style="--h: 20px"></span>
+                        <span class="wave-bar" style="--h: 16px"></span>
+                        <span class="wave-bar" style="--h: 12px"></span>
+                        <span class="wave-bar" style="--h: 9px"></span>
+                        <span class="wave-bar" style="--h: 6px"></span>
+                        <span class="wave-bar" style="--h: 4px"></span>
+                    </div>
+                </div>
+
+                <div class="card-footer-note">Nice</div>
+            </article>
+
+            <!-- Правая карточка: Skin -->
+            <article class="weather-card skin-card interactive-tilt">
+                <div class="card-head">
+                    <h2 class="card-title">Skin</h2>
+                    <span class="card-sub">Damage</span>
+                </div>
+
+                <div class="axis-cluster-field">
+                    <div class="radar-beam" aria-hidden="true"></div>
+                    <div class="cross-line vertical"></div>
+                    <div class="cross-line horizontal"></div>
+                    <span class="uv-dot white d-1"></span>
+                    <span class="uv-dot white d-2"></span>
+                    <span class="uv-dot yellow d-3"></span>
+                    <span class="uv-dot white d-4"></span>
+                    <span class="uv-dot yellow d-5"></span>
+                    <span class="uv-dot pink d-6"></span>
+                    <span class="uv-dot white d-7"></span>
+                    <span class="uv-dot white d-8"></span>
+                    <span class="uv-dot yellow d-9"></span>
+                    <span class="uv-dot pink d-10"></span>
+                </div>
+
+                <div class="axis-time-labels">
+                    <span>AM</span>
+                    <span>PM</span>
+                </div>
+            </article>
+
+        </section>
+        <!-- Нижняя панель действий как на оригинале -->
+        
+    </main>
+
+    <script>
+        // Закрытие экрана
+        document.getElementById('close-weather-btn').addEventListener('click', () => {
+            window.location.href = 'index.html';
+        });
+
+        // Интерактивное солнце
+      const track = document.getElementById("sun-track-container");
+const arc = document.getElementById("sun-main-arc");
+const stem = document.getElementById("sun-stem");
+const groundDot = document.getElementById("ground-dot");
+const sunBubble = document.getElementById("sun-bubble");
+const sunMiniIcon = document.getElementById("sun-mini-icon");
+const tempVal = document.querySelector(".temp-val.dot-matrix");
+const sunSvg = document.getElementById("sun-svg");
+
+const totalLength = arc.getTotalLength();
+const groundY = 74;          // Горизонт состыкован с SVG (y = 74)
+const bubbleRadius = 14;     // Радиус шара (чтобы ножка начиналась ровно под ним)
+
+// Точные координаты краев дуги в SVG (x = 64..276 из 340)
+const minPercent = 64 / 340;
+const maxPercent = 276 / 340;
+
+let isDragging = false;
+
+function setSunPosition(progress) {
+    const clamped = Math.max(0.01, Math.min(progress, 0.99));
+    const pt = arc.getPointAtLength(clamped * totalLength);
+
+    // Центр розового круга
+    sunBubble.setAttribute("cx", pt.x);
+    sunBubble.setAttribute("cy", pt.y);
+
+    // Центр лучей
+    sunMiniIcon.setAttribute("transform", `translate(${pt.x}, ${pt.y})`);
+
+    // Ножка начинается строго от нижнего края шара, не перекрывая лучики внутри
+    stem.setAttribute("x1", pt.x);
+    stem.setAttribute("y1", pt.y + bubbleRadius);
+    stem.setAttribute("x2", pt.x);
+    stem.setAttribute("y2", groundY);
+
+    // Точка на горизонте
+    groundDot.setAttribute("cx", pt.x);
+    groundDot.setAttribute("cy", groundY);
+
+    // Плавная температура: пик тепла ближе к полудню
+    if (tempVal) {
+        tempVal.textContent = Math.round(20 + 10 * Math.sin(clamped * Math.PI));
+    }
+}
+
+function handleMove(clientX) {
+    const rect = sunSvg.getBoundingClientRect();
+    const x = clientX - rect.left;
+    const currentPercent = x / rect.width;
+    const progress = (currentPercent - minPercent) / (maxPercent - minPercent);
+    setSunPosition(progress);
+}
+
+// Слушатели с захватом курсора/пальца
+track.addEventListener("pointerdown", (e) => {
+    isDragging = true;
+    track.setPointerCapture(e.pointerId);
+    handleMove(e.clientX);
+});
+
+track.addEventListener("pointermove", (e) => {
+    if (isDragging) {
+        handleMove(e.clientX);
+    }
+});
+
+track.addEventListener("pointerup", (e) => {
+    isDragging = false;
+    try { track.releasePointerCapture(e.pointerId); } catch (_) {}
+});
+
+track.addEventListener("pointercancel", (e) => {
+    isDragging = false;
+    try { track.releasePointerCapture(e.pointerId); } catch (_) {}
+});
+
+// Исходная позиция как на макете
+setSunPosition(0.72);
+
+// Автоматическая генерация синусоидальной волны для эквалайзера
+const waveBars = document.querySelectorAll('.mood-waveform.wide .wave-bar');
+waveBars.forEach((bar, index) => {
+    // Синусоидальная фазовая задержка создает эффект бегущей ряби
+    const delay = (Math.sin(index * 0.35) * 0.9).toFixed(2);
+    bar.style.animationDelay = `${delay}s`;
+});
+
+// Интерактивное состояние бегунка и реакция фона
+const sunIndicator = document.getElementById('sun-indicator');
+const weatherScreen = document.querySelector('.weather-screen');
+
+// Расширяем обработчик перемещения солнца
+const originalSetSunPosition = setSunPosition;
+setSunPosition = function(progress) {
+    originalSetSunPosition(progress);
+
+    // Динамическая смена оттенка атмосферы в зависимости от положения солнца
+    const clamped = Math.max(0.01, Math.min(progress, 0.99));
+    const sunsetFactor = Math.sin(clamped * Math.PI); // 1.0 в зените, 0.0 на закате/восходе
+    
+    const darkRed = Math.round(32 + sunsetFactor * 35);
+    const deepRed = Math.round(120 + sunsetFactor * 30);
+    
+    if (weatherScreen) {
+        weatherScreen.style.background = `radial-gradient(130% 90% at 50% 50%, #150003 0%, rgb(${darkRed}, 2, 8) 48%, rgb(${deepRed}, 9, 23) 82%, #8e0b1d 100%)`;
+    }
+};
+
+// Подсветка перетаскивания
+track.addEventListener("pointerdown", () => {
+    if (sunIndicator) sunIndicator.classList.add("dragging");
+});
+
+window.addEventListener("pointerup", () => {
+    if (sunIndicator) sunIndicator.classList.remove("dragging");
+});
+
+
+
+const tiltCards = document.querySelectorAll('.interactive-tilt');
+
+tiltCards.forEach(card => {
+    function handleTilt(clientX, clientY) {
+        const rect = card.getBoundingClientRect();
+        const x = clientX - rect.left;
+        const y = clientY - rect.top;
+
+        // Нормализованные координаты от -1 до +1
+        const normX = (x / rect.width - 0.5) * 2;
+        const normY = (y / rect.height - 0.5) * 2;
+
+        const rotateX = -normY * 12; // угол наклона по вертикали
+        const rotateY = normX * 12;  // угол наклона по горизонтали
+
+        // Расчет динамического смещения тени (тень падает в противоположную сторону)
+        const shadowX = -normX * 18;
+        const shadowY = -normY * 18 + 16;
+        const shadowBlur = 32;
+
+        card.style.transform = `rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateZ(10px)`;
+        card.style.boxShadow = `
+            inset 0 1px 2px rgba(255, 255, 255, 0.2),
+            ${shadowX.toFixed(1)}px ${shadowY.toFixed(1)}px ${shadowBlur}px rgba(0, 0, 0, 0.85),
+            0 2px 8px rgba(0, 0, 0, 0.6)
+        `;
+    }
+
+    card.addEventListener('pointermove', (e) => {
+        handleTilt(e.clientX, e.clientY);
+    });
+
+    const resetTilt = () => {
+        card.style.transform = 'rotateX(0deg) rotateY(0deg) translateZ(0px)';
+        card.style.boxShadow = `
+            inset 0 1px 1px rgba(255, 255, 255, 0.12),
+            0 14px 28px rgba(0, 0, 0, 0.65),
+            0 4px 10px rgba(0, 0, 0, 0.5)
+        `;
+    };
+
+    card.addEventListener('pointerleave', resetTilt);
+    card.addEventListener('pointerup', resetTilt);
+    card.addEventListener('pointercancel', resetTilt);
+});
+    </script>
+</body>
+</html>

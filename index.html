@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IONA UI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="device-screen">
+        <header class="topbar">
+            <button class="circle-btn" aria-label="Back">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+            </button>
+
+            <h1 class="screen-title">IONA</h1>
+
+            <button class="circle-btn" aria-label="Menu">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="4" y1="7" x2="20" y2="7"></line>
+                    <line x1="4" y1="12" x2="20" y2="12"></line>
+                    <line x1="4" y1="17" x2="20" y2="17"></line>
+                </svg>
+            </button>
+        </header>
+
+       <!-- Карусель карточек -->
+<section class="carousel-container">
+
+    <div class="carousel-track">
+        <!-- Карта 1: Оригинальная малиново-фиолетовая -->
+        <div class="main-card active">
+            <div class="card-meta">
+                <span class="meta-label">Last test</span>
+                <span class="meta-date">Oct 23</span>
+            </div>
+            <div class="card-display">
+                <div class="dot-matrix-val">3.3</div>
+                <span class="metric-unit">Liter</span>
+            </div>
+        </div>
+
+        <!-- Карта 2: Синяя -->
+        <div class="main-card card-blue">
+            <div class="card-meta">
+                <span class="meta-label">Real-time</span>
+                <span class="meta-date">Oct 24</span>
+            </div>
+            <div class="card-display">
+                <div class="dot-matrix-val">4.8</div>
+                <span class="metric-unit">L / sec</span>
+            </div>
+        </div>
+
+        <!-- Карта 3: Красная (Переход в погоду) -->
+        <div class="main-card card-red" id="weather-card" title="Нажмите, чтобы открыть Погоду">
+            <div class="card-meta">
+                <span class="meta-label">Weather Forecast</span>
+                <span class="meta-date">Live</span>
+            </div>
+            <div class="card-display">
+                <div class="dot-matrix-val">+24°</div>
+                <span class="metric-unit">Sunny · Open ↗</span>
+            </div>
+        </div>
+
+        <!-- Карта 4: Желтая -->
+        <!-- Карта 4: Желтая (Переход на Sugar) -->
+        <div class="main-card card-yellow" id="sugar-card" title="Нажмите, чтобы открыть Sugar">
+            <div class="card-meta">
+                <span class="meta-label">Daily test</span>
+                <span class="meta-date">Oct 25</span>
+            </div>
+            <div class="card-display">
+                <div class="dot-matrix-val">94</div>
+                <span class="metric-unit">Points</span>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<!-- Подпись и точки -->
+<div class="carousel-footer">
+    <h2 class="carousel-title">Lung Capacity</h2>
+    <div class="dots-pagination">
+        <span class="dot active"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+    </div>
+</div>
+        <section class="widgets-grid">
+    <!-- 1. Daily Streak с перетаскиваемым бегунком -->
+    <article class="widget-card streak-card" id="streak-widget">
+        <span class="widget-title">Daily Streak</span>
+
+        <div class="streak-metric">
+            <span class="metric-num" id="streak-num">234</span>
+            <span class="metric-sub">Days</span>
+        </div>
+
+        <!-- Интерактивная шкала -->
+        <div class="scale-track interactive" id="streak-track">
+            <div class="dashes-row" id="dashes-row">
+                <!-- 16 точек шкалы -->
+                <span class="dash on"></span><span class="dash on"></span><span class="dash on"></span>
+                <span class="dash on"></span><span class="dash on"></span><span class="dash on"></span>
+                <span class="dash on"></span><span class="dash on"></span><span class="dash on"></span>
+                <span class="dash on"></span><span class="dash on"></span><span class="dash on"></span>
+                <span class="dash"></span><span class="dash"></span><span class="dash"></span><span class="dash"></span>
+            </div>
+            <div class="scale-thumb" id="streak-thumb"></div>
+        </div>
+    </article>
+
+    <!-- 2. Правая колонка -->
+    <div class="widgets-subgrid">
+        <!-- Training Card с тумблером -->
+        <article class="widget-card training-card" id="training-widget">
+            <span class="widget-title" id="training-title">Training</span>
+            <label class="ios-switch">
+                <input type="checkbox" id="training-toggle" checked>
+                <span class="switch-pill"></span>
+            </label>
+        </article>
+
+        <!-- Breath Volume с анимацией замера -->
+        <article class="widget-card volume-card" id="volume-widget" title="Нажмите для симуляции вдоха">
+            <div class="volume-header">
+                <span class="widget-title">Breath Volume</span>
+                <div class="volume-metric">
+                    <span class="val dot-matrix" id="volume-val">5.5</span>
+                    <span class="unit">L</span>
+                </div>
+            </div>
+
+            <div class="volume-svg-wrap">
+                <svg viewBox="0 0 145 70" width="145" height="70" fill="none">
+                    <line x1="0" y1="58" x2="145" y2="58" stroke="rgba(255,255,255,0.25)" stroke-width="1.5" stroke-dasharray="2 3" />
+                    <path class="animated-arc arc-sm" d="M 24 58 A 18 18 0 0 1 60 58" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" />
+                    <path class="animated-arc arc-lg" d="M 60 58 A 36 36 0 0 1 132 58" stroke="#ffffff" stroke-width="2" />
+                    <circle cx="24" cy="58" r="3" fill="#ffffff" />
+                    <circle cx="60" cy="58" r="3.5" fill="#ffffff" />
+                    <circle cx="76" cy="58" r="2" fill="#ffffff" />
+                    <circle cx="132" cy="58" r="3.5" fill="#ffffff" />
+                </svg>
+            </div>
+        </article>
+    </div>
+</section>
+<script src="app.js"></script>
+</body>
+</html>

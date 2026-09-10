@@ -1,0 +1,703 @@
+:root {
+    --font-ui: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-dots: 'Silkscreen', monospace;
+    --text-pure: #ffffff;
+    --text-muted: rgba(255, 255, 255, 0.62);
+    --border-glass: rgba(255, 255, 255, 0.12);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    background-color: #050102;
+    font-family: var(--font-ui);
+    color: var(--text-pure);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Экран смартфона */
+.weather-screen {
+    width: 100%;
+    max-width: 420px;
+    height: 890px;
+    border-radius: 54px;
+    padding: 20px 22px 24px 22px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.95), 0 0 0 1px rgba(255, 255, 255, 0.08);
+    background: radial-gradient(130% 90% at 50% 50%, #200105 0%, #3e040c 48%, #780917 82%, #8e0b1d 100%);
+    background-color: #1a0104;
+}
+
+/* Статус-бар iPhone */
+.ios-status-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0 6px;
+    margin-top: 4px;
+    margin-bottom: 8px;
+}
+
+.status-time {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: -0.2px;
+}
+
+.dynamic-island {
+    width: 96px;
+    height: 24px;
+    background-color: #000000;
+    border-radius: 14px;
+}
+
+.status-icons {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.battery-icon {
+    width: 22px;
+    height: 11px;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    border-radius: 3px;
+    position: relative;
+    padding: 1px;
+}
+
+.battery-icon::before {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff;
+    border-radius: 1.5px;
+}
+
+.battery-icon::after {
+    content: "";
+    position: absolute;
+    right: -3px;
+    top: 3px;
+    width: 2px;
+    height: 4px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 0 1px 1px 0;
+}
+
+/* Шапка */
+.weather-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+}
+
+.page-title {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.4px;
+}
+
+.back-chevron {
+    background: transparent;
+    border: none;
+    color: var(--text-pure);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease;
+}
+
+.back-chevron:active {
+    transform: translateY(2px) scale(0.92);
+}
+
+/* Температурный блок */
+.temp-hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2px;
+}
+
+.temp-container {
+    position: relative;
+    display: inline-flex;
+    align-items: flex-start;
+}
+
+.temp-val.dot-matrix {
+    font-family: var(--font-dots), monospace;
+    font-size: 78px;
+    line-height: 0.95;
+    letter-spacing: 3px;
+    color: #ffffff;
+    text-shadow: 0 0 16px rgba(255, 255, 255, 0.45);
+}
+
+.deg-symbol {
+    font-size: 22px;
+    font-weight: 300;
+    margin-top: 4px;
+    margin-left: 4px;
+    opacity: 0.85;
+}
+
+.condition-label {
+    font-size: 16px;
+    font-weight: 500;
+    margin-top: 8px;
+}
+
+.location-label {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 2px;
+    font-weight: 300;
+}
+
+/* График солнца */
+/* Контейнер всего блока траектории */
+.sun-path-section {
+    width: 100%;
+    margin-top: 14px;
+    margin-bottom: 20px;
+    padding: 0 4px; /* Защита от обрезания цифр по бокам */
+    user-select: none;
+    touch-action: none;
+}
+
+.sun-curve-svg {
+    width: 100%;
+    height: 98px;
+    overflow: visible;
+    cursor: grab;
+}
+
+.sun-curve-svg:active {
+    cursor: grabbing;
+}
+
+/* Строка с текстом и иконкой */
+/* Строка мета-информации с идеальным геометрическим центром */
+.sun-meta-row {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: flex-end;
+    width: 100%;
+    padding: 0 10px;
+    margin-top: 8px;
+}
+
+.meta-item.left {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-self: start;
+}
+
+.meta-item.center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    justify-self: center;
+    text-align: center;
+}
+
+.meta-item.right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-self: end;
+}
+
+/* Фиксация центровки SVG-солнца */
+.pixel-sun-svg {
+    display: block;
+    margin: 0 auto 6px auto;
+}
+
+.pixel-sun-svg {
+    width: 26px;
+    height: 26px;
+    shape-rendering: crispEdges;
+    margin-bottom: 7px;
+    opacity: 0.95;
+    filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.4));
+}
+
+.weather-widgets {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 12px !important;
+    width: 100% !important;
+    height: 260px !important;
+    margin-top: 14px;
+    margin-bottom: 8px;
+    perspective: 1000px;
+}
+
+/* Карточки не должны растягиваться на 100% ширины */
+.weather-widgets .weather-card {
+    width: 100% !important;
+    max-width: none !important;
+    height: 100% !important;
+    border-radius: 32px;
+    padding: 18px 14px 16px 14px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: radial-gradient(130% 130% at 20% 20%, rgba(45, 4, 12, 0.72) 0%, rgba(16, 1, 4, 0.88) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    overflow: hidden;
+    position: relative;
+}
+/* Базовая карточка */
+
+
+.card-head {
+    display: flex;
+    flex-direction: column;
+}
+
+.card-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1.1;
+}
+
+.card-sub {
+    font-size: 12px;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.55);
+    margin-top: 1px;
+}
+
+/* Центральная часть с числом и волной растянута по высоте */
+.mood-center-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    gap: 14px;
+    margin: auto 0;
+}
+
+/* Волна от края до края карточки */
+.mood-waveform.wide {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 100%;
+    padding: 0 2px;
+    height: 64px;
+}
+
+.mood-waveform.wide .wave-bar {
+    width: 1.8px;
+    height: var(--h);
+    background: rgba(255, 255, 255, 0.45);
+    border-radius: 1px;
+    transform-origin: center;
+    animation: waveBreathe 2.2s ease-in-out infinite alternate;
+    animation-delay: var(--d);
+}
+
+.mood-waveform.wide .wave-bar.peak {
+    background: rgba(255, 255, 255, 0.85);
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.7);
+}
+
+@keyframes waveBreathe {
+    0% {
+        transform: scaleY(0.85);
+        opacity: 0.4;
+    }
+    100% {
+        transform: scaleY(1.15);
+        opacity: 0.85;
+    }
+}
+
+.card-footer-note {
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.65);
+}
+
+/* --- КАРТОЧКА SKIN DAMAGE --- */
+/* Координатная плоскость во второй карточке пропорционально вытягивается */
+.axis-cluster-field {
+    position: relative;
+    width: 100%;
+    height: 105px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto 0;
+}
+
+.cross-line {
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.22);
+}
+
+.cross-line.vertical {
+    width: 1px;
+    height: 100%;
+}
+
+.cross-line.horizontal {
+    height: 1px;
+    width: 90%;
+}
+
+.uv-dot {
+    position: absolute;
+    border-radius: 50%;
+}
+
+.uv-dot.white { background-color: #ffffff; box-shadow: 0 0 4px rgba(255, 255, 255, 0.8); }
+.uv-dot.yellow { background-color: #fbe047; box-shadow: 0 0 5px rgba(251, 224, 71, 0.9); }
+.uv-dot.pink { background-color: rgba(255, 160, 185, 0.5); }
+
+/* Расстановка созвездия точек */
+.d-1 { width: 4px; height: 4px; top: 22px; left: 45%; }
+.d-2 { width: 6px; height: 6px; top: 30px; left: 58%; }
+.d-3 { width: 7px; height: 7px; top: 40px; left: 47%; }
+.d-4 { width: 4px; height: 4px; top: 44px; left: 34%; }
+.d-5 { width: 5px; height: 5px; top: 52px; left: 54%; }
+.d-6 { width: 8px; height: 8px; top: 32px; left: 68%; }
+.d-7 { width: 3px; height: 3px; top: 56px; left: 40%; }
+.d-8 { width: 7px; height: 7px; top: 62px; left: 46%; }
+.d-9 { width: 4px; height: 4px; top: 60px; left: 63%; }
+.d-10 { width: 8px; height: 8px; top: 64px; left: 66%; }
+
+.axis-time-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.55);
+}
+
+/* Нижняя панель действий (кнопки X / M / Check) */
+.bottom-action-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 4px;
+    margin-top: 6px;
+}
+
+.bottom-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    cursor: pointer;
+    transition: transform 0.15s ease;
+}
+
+.bottom-btn:active {
+    transform: scale(0.92);
+}
+
+.cancel-btn {
+    background-color: #d82b38;
+    color: #ffffff;
+}
+
+.confirm-btn {
+    background-color: #ffffff;
+    color: #000000;
+}
+
+.middle-slider-pill {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 8px 18px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.slider-notch {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.slider-notch.active {
+    width: 22px;
+    height: 22px;
+    background: #fab539;
+    color: #000;
+    font-weight: 700;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 10px rgba(250, 181, 57, 0.5);
+}
+
+
+/* --- 1. КАСКАДНОЕ ПОЯВЛЕНИЕ ЭЛЕМЕНТОВ (STAGGER ENTRANCE) --- */
+.temp-hero, 
+.sun-path-section, 
+.weather-widgets {
+    opacity: 0;
+    transform: translateY(22px);
+    animation: fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.temp-hero { animation-delay: 0.08s; }
+.sun-path-section { animation-delay: 0.18s; }
+.weather-widgets { animation-delay: 0.28s; }
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* --- 2. ЖИВОЙ ЭКВАЛАЙЗЕР-ОСЦИЛЛОГРАФ (MOOD WAVE) --- */
+.mood-waveform.wide .wave-bar {
+    animation: audioPulse 1.8s ease-in-out infinite alternate;
+}
+
+@keyframes audioPulse {
+    0% {
+        transform: scaleY(0.45);
+        opacity: 0.35;
+    }
+    50% {
+        transform: scaleY(1.18);
+        opacity: 0.9;
+        filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.7));
+    }
+    100% {
+        transform: scaleY(0.7);
+        opacity: 0.5;
+    }
+}
+
+/* --- 3. ОРБИТАЛЬНЫЙ ДРЕЙФ ТОЧЕК UV (SKIN DAMAGE) --- */
+.uv-dot {
+    animation: particleFloat 4s ease-in-out infinite alternate;
+}
+
+/* Разные траектории и фазы для точек */
+.d-1, .d-5, .d-9 { animation-duration: 3.4s; animation-delay: -0.5s; }
+.d-2, .d-6, .d-10 { animation-duration: 4.8s; animation-delay: -1.2s; }
+.d-3, .d-7 { animation-duration: 3.9s; animation-delay: -2s; }
+.d-4, .d-8 { animation-duration: 5.2s; animation-delay: -0.8s; }
+
+@keyframes particleFloat {
+    0% {
+        transform: translate(0, 0) scale(0.9);
+        opacity: 0.6;
+    }
+    50% {
+        transform: translate(3px, -4px) scale(1.15);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-3px, 3px) scale(0.85);
+        opacity: 0.5;
+    }
+}
+
+/* Центральная перекрестная сетка дышит */
+.cross-line {
+    transition: opacity 0.3s ease;
+}
+
+.skin-card:hover .cross-line {
+    opacity: 0.6;
+}
+
+/* --- 4. ПУЛЬСАЦИЯ СОЛНЦА НА ДУГЕ ПРИ ДВИЖЕНИИ --- */
+#sun-bubble {
+    transition: transform 0.15s ease, fill 0.3s ease;
+    transform-origin: center;
+}
+
+#sun-indicator.dragging #sun-bubble {
+    transform: scale(1.18);
+    fill: rgba(235, 90, 120, 0.95);
+    filter: drop-shadow(0 0 12px rgba(255, 100, 130, 0.8));
+}
+
+#sun-indicator.dragging #sun-stem {
+    stroke: rgba(255, 150, 175, 0.9);
+}
+
+/* --- 1. 3D НАКЛОН И ПЕРСПЕКТИВА КАРТОЧЕК --- */
+.weather-widgets {
+    perspective: 900px; /* Глубина для 3D */
+}
+
+.weather-card.interactive-tilt {
+    transform-style: preserve-3d;
+    transition: transform 0.18s cubic-bezier(0.2, 0.8, 0.4, 1), box-shadow 0.25s ease;
+    will-change: transform;
+}
+
+/* Выдавливание элементов наружу (параллакс по оси Z) */
+.mood-val.dot-matrix,
+.mood-waveform.wide,
+.axis-cluster-field {
+    transform: translateZ(24px);
+    transform-style: preserve-3d;
+}
+
+/* --- 2. СВЕТОВОЙ БЛИК СТЕКЛА (GLASS SHEEN) --- */
+.weather-card::after {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -120%;
+    width: 80%;
+    height: 200%;
+    background: linear-gradient(
+        60deg,
+        transparent 35%,
+        rgba(255, 255, 255, 0.08) 50%,
+        transparent 65%
+    );
+    transform: rotate(25deg);
+    pointer-events: none;
+    animation: glassSheenPass 7s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.skin-card::after {
+    animation-delay: 3.5s; /* Карточки бликуют по очереди */
+}
+
+@keyframes glassSheenPass {
+    0%, 75% { transform: translateX(0) rotate(25deg); opacity: 0; }
+    80% { opacity: 1; }
+    95%, 100% { transform: translateX(380%) rotate(25deg); opacity: 0; }
+}
+
+/* --- 3. СКАНИРУЮЩИЙ ЛУЧ РАДАРА (RADAR SWEEP) --- */
+.radar-beam {
+    position: absolute;
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    background: conic-gradient(
+        from 0deg,
+        rgba(255, 255, 255, 0.18) 0deg,
+        rgba(255, 120, 150, 0.08) 35deg,
+        transparent 60deg,
+        transparent 360deg
+    );
+    pointer-events: none;
+    animation: rotateRadar 4s linear infinite;
+    mix-blend-mode: screen;
+}
+
+@keyframes rotateRadar {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Подсветка осей при наведении */
+.axis-cluster-field:hover .cross-line {
+    background-color: rgba(255, 255, 255, 0.45);
+    box-shadow: 0 0 6px rgba(255, 255, 255, 0.3);
+}
+
+/* --- 4. КИБЕРПАНК RGB-ГЛИТЧ ПРИ СМЕНЕ ЗНАЧЕНИЙ --- */
+.temp-val.glitch-active {
+    animation: chromaticGlitch 0.22s ease-in-out;
+}
+
+@keyframes chromaticGlitch {
+    0% {
+        text-shadow: -2px 0 #ff0055, 2px 0 #00ffff;
+        transform: translate(1px, -1px);
+    }
+    50% {
+        text-shadow: 2px 0 #ff0055, -2px 0 #00ffff;
+        transform: translate(-1.5px, 1px);
+    }
+    100% {
+        text-shadow: 0 0 16px rgba(255, 255, 255, 0.45);
+        transform: translate(0, 0);
+    }
+}
+
+/* Включаем 3D-пространство для контейнера виджетов */
+/* Базовое 3D-пространство */
+.weather-widgets {
+    perspective: 1000px;
+}
+
+/* Карточка с динамической тенью корпуса */
+.mood-card.interactive-tilt {
+    transform-style: preserve-3d;
+    transition: transform 0.15s cubic-bezier(0.2, 0.8, 0.4, 1), box-shadow 0.15s ease;
+    will-change: transform, box-shadow;
+    /* Исходная мягкая посадочная тень */
+    box-shadow: 
+        inset 0 1px 1px rgba(255, 255, 255, 0.12),
+        0 14px 28px rgba(0, 0, 0, 0.65),
+        0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Цифра 9 3: выдвинута вперед на 36px + глубокая тень на задник */
+.mood-card .mood-val.dot-matrix {
+    transform: translateZ(36px);
+    filter: drop-shadow(0 12px 10px rgba(0, 0, 0, 0.75))
+            drop-shadow(0 2px 4px rgba(0, 0, 0, 0.9));
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+/* Эквалайзер: выдвинут вперед на 46px + рассеянная объемная тень */
+.mood-card .mood-waveform.wide {
+    transform: translateZ(46px);
+    transform-style: preserve-3d;
+    filter: drop-shadow(0 14px 12px rgba(0, 0, 0, 0.85))
+            drop-shadow(0 3px 5px rgba(0, 0, 0, 0.95));
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+/* Текст шапки и подвала на промежуточном слое */
+.mood-card .card-head,
+.mood-card .card-footer-note {
+    transform: translateZ(16px);
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.5));
+}
